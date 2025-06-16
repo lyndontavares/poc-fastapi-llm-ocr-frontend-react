@@ -1,34 +1,11 @@
-# Javascript builds
-node_modules
+**/node_modules
 dist
-tsc_out
-.out
-.changelog
-.DS_Store
-coverage
-.cache
-.tmp
-.eslintcache
-package-lock.json
-
-# package managers
 yarn-error.log
-lerna-debug.log
-
-# IDEs and editors
+yarn.lock
+stats.json
+coverage
+storybook-static
+.DS_Store
 .idea
-.project
-.classpath
-.c9
-*.launch
-.settings
-*.sublime-workspace
+.env
 .history
-.vscode
-.yo-rc.json
-
-# IDE - VSCode
-.vscode
-# For vim
-*.swp
-.yarn
