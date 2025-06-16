@@ -187,6 +187,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       addAlert('Erro ao enviar nots fiscal', 'danger', getUniqueId());
     } finally {
       setIsLoading(false);
+      resetForm();
     }
   };
 
