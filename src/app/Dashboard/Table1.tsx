@@ -39,7 +39,7 @@ import { ConfirmDialog } from '@app/utils/ConfirmDialog';
 export const TableColumnManagement: React.FunctionComponent = () => {
   const [formUploadOpen, setFormUploadOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const defaultColumns = ['Id', 'Valor', 'Hash', 'Data', 'CNPJ', 'Status', 'Ação']; //columns;
+  const defaultColumns = ['Id', ' CNPJ', 'Data', 'Valor', 'Hash', 'Status', 'Ação']; //columns;
   const [defaultRows, setDefaultRows] = useState<any[]>([]); // rows;
 
   const [filters, setFilters] = useState<string[]>([]);
@@ -135,6 +135,13 @@ export const TableColumnManagement: React.FunctionComponent = () => {
     }
     buscarJson();
   }
+
+  const formatarParaReais = (valor) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(valor);
+  };
 
   useEffect(() => {
     setPaginatedRows(managedRows.slice((page - 1) * perPage, page * perPage - 1));
@@ -406,15 +413,13 @@ export const TableColumnManagement: React.FunctionComponent = () => {
                     <Td width={10} dataLabel="Status" key={`${idx}-${value}`}>
                       {renderLabel(value as string)}
                     </Td>
-                  ) : key === 'xxx' ? (
-                    <Td width={10} dataLabel="Ação" key={`${idx}-${value}`}>
-                      <button type="button" className={btnClasses}>
-                        Deletar
-                      </button>
+                  ) : key === 'valor_total' ? (
+                    <Td width={10} dataLabel="Valor Total" key={`${idx}-${value}`}>
+                       {formatarParaReais(value as number)}
                     </Td>
                   ) : (
                     <Td
-                      width={key === 'name' ? 15 : 10}
+                      width={10}
                       dataLabel={key === 'lastModified' ? 'Last modified' : capitalize(key)}
                       key={`${idx}-${value}`}
                     >
@@ -424,13 +429,13 @@ export const TableColumnManagement: React.FunctionComponent = () => {
                 )}
                 <Td width={10} dataLabel="Ação" key={`action-${row}`}>
                   <ConfirmDialog
-                    buttonTitle='Excluir' 
+                    buttonTitle='Excluir'
                     title="Deseja excluir este item?"
                     message="Esta ação é irreversível e excluirá permanentemente o item selecionado."
                     confirmText="Excluir"
                     cancelText="Cancelar"
                     onConfirm={() => deletar(row)}
-                    trigger={<Button variant="secondary" ouiaId="Secondary">Excluir</Button>}                  />
+                    trigger={<Button variant="secondary" ouiaId="Secondary">Excluir</Button>} />
                 </Td>
               </>
             </Tr>
