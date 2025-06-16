@@ -34,6 +34,7 @@ import React from 'react';
 import Block from '../utils/Block';
 import ImageUploadModal from './ImageUploadModal';
 import buttonStyles from '@patternfly/react-styles/css/components/Button/button';
+import { ConfirmDialog } from '@app/utils/ConfirmDialog';
 
 export const TableColumnManagement: React.FunctionComponent = () => {
   const [formUploadOpen, setFormUploadOpen] = useState(false);
@@ -73,22 +74,6 @@ export const TableColumnManagement: React.FunctionComponent = () => {
         return 'status';
       case 'Ação':
         return 'acao';
-      /*       case 'Servers':
-              return 'name';
-            case 'Threads':
-              return 'threads';
-            case 'Applications':
-              return 'applications';
-            case 'Workspaces':
-              return 'workspaces';
-            case 'Status':
-              return 'status';
-            case 'Location':
-              return 'location';
-            case 'Last Modified':
-              return 'lastModified';
-            case 'URL':
-              return 'url'; */
       default:
         return '';
     }
@@ -354,16 +339,6 @@ export const TableColumnManagement: React.FunctionComponent = () => {
         <ToolbarContent>
           <ToolbarItem>
             <OverflowMenu breakpoint="md">
-              {/*               <OverflowMenuItem>
-                <MenuToggle icon={<FilterIcon />}>Name</MenuToggle>
-              </OverflowMenuItem>
-              <OverflowMenuItem>
-                <MenuToggle
-                  variant="plain"f
-                  aria-label="Sort columns"
-                  icon={<SortAmountDownIcon aria-hidden="true" />}
-                />
-              </OverflowMenuItem> */}
               <OverflowMenuGroup groupType="button" isPersistent>
                 <OverflowMenuItem>
                   <Button variant="primary" onClick={() => setFormUploadOpen(true)} >Adicionar Nota Fiscal</Button>
@@ -412,8 +387,6 @@ export const TableColumnManagement: React.FunctionComponent = () => {
 
   return (
     <Fragment>
-      {/*       <DashboardWrapper hasPageTemplateTitle>
-        <PageSection isFilled> */}
       {toolbarItems}
       <Table variant="compact" aria-label="Column Management Table">
         <Thead>
@@ -450,9 +423,14 @@ export const TableColumnManagement: React.FunctionComponent = () => {
                   )
                 )}
                 <Td width={10} dataLabel="Ação" key={`action-${row}`}>
-                  <button type="button" onClick={()=>deletar(row)} className={btnClasses}>
-                    Deletar
-                  </button>
+                  <ConfirmDialog
+                    buttonTitle='Excluir' 
+                    title="Deseja excluir este item?"
+                    message="Esta ação é irreversível e excluirá permanentemente o item selecionado."
+                    confirmText="Excluir"
+                    cancelText="Cancelar"
+                    onConfirm={() => deletar(row)}
+                    trigger={<Button variant="secondary" ouiaId="Secondary">Excluir</Button>}                  />
                 </Td>
               </>
             </Tr>
@@ -461,8 +439,6 @@ export const TableColumnManagement: React.FunctionComponent = () => {
       </Table>
       {renderPagination('bottom', false)}
       {renderModal()}
-      {/*         </PageSection>
-      </DashboardWrapper> */}
 
       {loading && <Block message="Carregando conteúdo..." />}
 

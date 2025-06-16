@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Modal,
   Button,
+  DatePicker,
   Form,
   FormGroup,
   TextInput,
@@ -17,7 +18,8 @@ import {
   AlertActionCloseButton,
   AlertVariant,
   Flex,
-  FlexItem
+  FlexItem,
+  ValidatedOptions
 } from '@patternfly/react-core';
 import Block from '@app/utils/Block';
 
@@ -27,6 +29,26 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
   const [zoomed, setZoomed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [mensagem, setMensagem] = useState('');
+
+  const [rotation, setRotation] = useState(0);
+
+  const rotate = () => {
+    setRotation((prev) => (prev + 90) % 360); // gira 90° por clique
+  };
+
+  const dateFormat = (date: Date) =>
+    date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+
+  const dateParse = (date: string) => {
+    const split = date.split('-');
+    if (split.length !== 3) {
+      return new Date();
+    }
+    const month = split[0];
+    const day = split[1];
+    const year = split[2];
+    return new Date(`${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T00:00:00`);
+  };
 
   const [form, setForm] = useState({
     id: '',
@@ -132,8 +154,20 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
   const getUniqueId = () => new Date().getTime();
 
   function formCheck() {
-    if (!form.data_emissao || !form.valor_total || !form.cnpj || !imageFile) {
-      addAlert('Preencha todos os campos obrigatórios.', 'warning', getUniqueId());
+    if (!form.cnpj) {
+      addAlert('[CNPJ] é obrigatório.', 'warning', getUniqueId());
+      return false;
+    }
+    if (!form.data_emissao) {
+      addAlert('[Data emissão] é obrigatório.', 'warning', getUniqueId());
+      return false;
+    }
+    if (!form.valor_total) {
+      addAlert('[Valor] é obrigatório.', 'warning', getUniqueId());
+      return false;
+    }
+    if (!imageFile) {
+      addAlert('[Imagem] é obrigatório.', 'warning', getUniqueId());
       return false;
     }
     if (form.status === 'PROCESSADO') {
@@ -175,7 +209,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       console.log(response);
 
       if (response.ok) {
-        addAlert('Salvo com sucesso.', 'success', getUniqueId());
+        //addAlert('Salvo com sucesso.', 'success', getUniqueId());
         onClose();
       } else {
         setIsLoading(false)
@@ -197,14 +231,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       aria-label="Formulário de adicionar nota fiscal"
       isOpen={isOpen}
       onClose={onClose}
-    /* actions={[
-      <Button key="confirm" variant="primary" onClick={handleSubmit}>
-        Enviar
-      </Button>,
-      <Button key="cancel" variant="link" onClick={onClose}>
-        Cancelar
-      </Button>
-    ]} */
+
     >
 
       <ModalHeader
@@ -229,25 +256,31 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                   readOnly
                   id="id"
                   value={form.id}
-                  onChange={(val) => handleChange('id', val)}
+                  onChange={(e, val) => handleChange('id', val)}
                 />
               </FormGroup>
 
               <FormGroup label="CNPJ" fieldId="cnpj">
                 <TextInput
-                  id="id"
+                  id="cnpj"
                   value={form.cnpj}
-                  onChange={(val) => handleChange('cnpj', val)}
+                  onChange={(e, val) => handleChange('cnpj', val)}
+                  isRequired
+                /* isRequired
+                validated={form.cnpj ? ValidatedOptions.success : ValidatedOptions.error} */
+
                 />
               </FormGroup>
 
               <FormGroup label="Data de Emissão" fieldId="data_emissao">
-                <TextInput
+                <DatePicker
                   id="data_emissao"
-                  type="date"
                   value={form.data_emissao}
-                  onChange={(val) => handleChange('data_emissao', val)}
+                  onChange={(e, val) => handleChange('data_emissao', val)}
+                  requiredDateOptions={{ isRequired: true, emptyDateText: 'Data emissão é obrigatória' }}
+                  dateFormat={dateFormat} dateParse={dateParse}
                 />
+
               </FormGroup>
 
               <FormGroup label="Valor Pago" fieldId="valor_total">
@@ -256,7 +289,8 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                   type="number"
                   step="0.01"
                   value={form.valor_total}
-                  onChange={(val) => handleChange('valor_total', val)}
+                  onChange={(e, val) => handleChange('valor_total', val)}
+
                 />
               </FormGroup>
 
@@ -265,7 +299,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                   readOnly
                   id="imagem_hash"
                   value={form.imagem_hash}
-                  onChange={(val) => handleChange('imagem_hash', val)}
+                  onChange={(e, val) => handleChange('imagem_hash', val)}
                 />
               </FormGroup>
 
@@ -274,7 +308,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                   readOnly
                   id="status"
                   value={form.status}
-                  onChange={(val) => handleChange('status', val)}
+                  onChange={(e, val) => handleChange('status', val)}
                 />
               </FormGroup>
             </div>
@@ -312,12 +346,16 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                       maxWidth: zoomed ? '90%' : '200px',
                       maxHeight: zoomed ? '90vh' : '200px',
                       border: '1px solid #ccc',
-                      transition: 'transform 0.2s'
+                      transition: 'transform 0.2s',
+                      transform: `rotate(${rotation}deg)`,
+                       
                     }}
                   />
                   <div style={{ fontSize: '0.8rem', color: '#666' }}>
                     (Clique para {zoomed ? 'reduzir' : 'ampliar'})
                   </div>
+                  <Button onClick={() => setRotation(rotation - 90)} variant="secondary" style={{ marginTop: 10 }}> ←</Button>
+                  <Button onClick={() => setRotation(rotation + 90)} variant="secondary" style={{ marginTop: 10 }}> →</Button>
                 </div>
               )}
             </div>
@@ -336,6 +374,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
           onClick={(event: React.MouseEvent<Element, MouseEvent> | KeyboardEvent) => {
             //setColumnData(initialColData);
             //handleModalToggle(event);
+            resetForm();
             onClose();
           }}
         >
