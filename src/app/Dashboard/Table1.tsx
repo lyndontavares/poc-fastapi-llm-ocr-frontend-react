@@ -97,7 +97,7 @@ export const TableColumnManagement: React.FunctionComponent = () => {
   const renderPagination = (variant: 'top' | 'bottom' | PaginationVariant, isCompact: boolean) => (
     <Pagination
       isCompact={isCompact}
-      itemCount={rows.length}
+      itemCount={managedRows.length}
       page={page}
       perPage={perPage}
       onSetPage={handleSetPage}
@@ -125,6 +125,7 @@ export const TableColumnManagement: React.FunctionComponent = () => {
         const json = await resposta.json();
         setDefaultRows(json);
         setManagedRows(json);
+        setPaginatedRows(json.slice((page - 1) * perPage, page * perPage - 1));
       } catch (erro) {
         console.error('Erro:', erro);
       } finally {
