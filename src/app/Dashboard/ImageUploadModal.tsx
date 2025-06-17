@@ -22,6 +22,7 @@ import {
   ValidatedOptions
 } from '@patternfly/react-core';
 import Block from '@app/utils/Block';
+import { validaCNPJ } from '@app/utils/cnpjUtil';
 
 export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
   const [imageFile, setImageFile] = useState(null);
@@ -107,7 +108,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       });
 
     } catch (error) {
-      addAlert('Erro ao processar exração de dados.', 'danger', getUniqueId());
+      addAlert('Erro ao processar extração de dados.', 'danger', getUniqueId());
     } finally {
       setIsLoading(false);
     }
@@ -158,6 +159,11 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       addAlert('[CNPJ] é obrigatório.', 'warning', getUniqueId());
       return false;
     }
+     if (! validaCNPJ(form.cnpj)) {
+      addAlert('[CNPJ] inválido.', 'warning', getUniqueId());
+      return false;
+    }
+       
     if (!form.data_emissao) {
       addAlert('[Data emissão] é obrigatório.', 'warning', getUniqueId());
       return false;
