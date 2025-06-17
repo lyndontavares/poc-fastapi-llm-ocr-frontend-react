@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import brandImg from '../../assets/PF-IconLogo.svg';
+import brandImg from '/assets/PF-IconLogo.svg';
 import {
   LoginFooterItem,
   LoginForm,
