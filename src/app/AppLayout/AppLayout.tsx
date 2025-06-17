@@ -40,25 +40,25 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
           <MastheadLogo data-codemods>
             <svg height="40px" viewBox="0 0 679 158">
 
-<title>PatternFly</title>
- <defs>
-  <linearGradient id="linearGradient-website-masthead" x1="68%" x2="32%" y1="2.25860997e-13%" y2="100%">
-   <stop offset="0%" stopColor="#2B9AF3"/>
-   <stop offset="100%" stopColor="#73BCF7" stopOpacity="0.5"/>
-  </linearGradient>
- </defs>
- <g className="layer">
-  <title>Layer 1</title>
-  <g fill="var(--pf-t--global--text--color--regular)" fillRule="nonzero" id="svg_2">
-   <text fill="#000000" fontFamily="Helvetica" fontSize="24" fontWeight="bold" id="svg_17" strokeWidth="0" textAnchor="middle" transform="matrix(2.09015 0 0 2.86039 -4.70208 76.7012)" x="213" xmlSpace="preserve" y="7">Extração Inteligente</text>
-  </g>
-  <g id="svg_13">
-   <path d="m61.83,0l96.17,0l0,96.17l-10.3,0c-47.43,0 -85.87,-38.44 -85.87,-85.87l0,-10.3l0,0z" fill="var(--pf-t--color--blue--50)" id="svg_14"/>
-   <path d="m158,3.43l-92.74,154.57l72.74,0c11.05,0 20,-8.95 20,-20l0,-134.57l0,0z" fill="url(#linearGradient-website-masthead)" id="svg_15"/>
-   <path d="m123.65,-30.91l-92.74,154.56l72.74,0c11.05,0 20,-8.95 20,-20l0,-134.56l0,0z" fill="url(#linearGradient-website-masthead)" id="svg_16" transform="translate(77.282609, 46.369565) scale(1, -1) rotate(90.000000) translate(-77.282609, -46.369565) "/>
-  </g>
- </g>
-</svg>
+              <title>PatternFly</title>
+              <defs>
+                <linearGradient id="linearGradient-website-masthead" x1="68%" x2="32%" y1="2.25860997e-13%" y2="100%">
+                  <stop offset="0%" stopColor="#2B9AF3" />
+                  <stop offset="100%" stopColor="#73BCF7" stopOpacity="0.5" />
+                </linearGradient>
+              </defs>
+              <g className="layer">
+                <title>Layer 1</title>
+                <g fill="var(--pf-t--global--text--color--regular)" fillRule="nonzero" id="svg_2">
+                  <text fill="#000000" fontFamily="Helvetica" fontSize="24" fontWeight="bold" id="svg_17" strokeWidth="0" textAnchor="middle" transform="matrix(2.09015 0 0 2.86039 -4.70208 76.7012)" x="213" xmlSpace="preserve" y="7">Extração Inteligente</text>
+                </g>
+                <g id="svg_13">
+                  <path d="m61.83,0l96.17,0l0,96.17l-10.3,0c-47.43,0 -85.87,-38.44 -85.87,-85.87l0,-10.3l0,0z" fill="var(--pf-t--color--blue--50)" id="svg_14" />
+                  <path d="m158,3.43l-92.74,154.57l72.74,0c11.05,0 20,-8.95 20,-20l0,-134.57l0,0z" fill="url(#linearGradient-website-masthead)" id="svg_15" />
+                  <path d="m123.65,-30.91l-92.74,154.56l72.74,0c11.05,0 20,-8.95 20,-20l0,-134.56l0,0z" fill="url(#linearGradient-website-masthead)" id="svg_16" transform="translate(77.282609, 46.369565) scale(1, -1) rotate(90.000000) translate(-77.282609, -46.369565) " />
+                </g>
+              </g>
+            </svg>
           </MastheadLogo>
         </MastheadBrand>
       </MastheadMain>
