@@ -260,7 +260,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                 />
               </FormGroup>
 
-              <FormGroup label="CNPJ" fieldId="cnpj">
+              <FormGroup label="CNPJ" isRequired fieldId="cnpj">
                 <TextInput
                   id="cnpj"
                   value={form.cnpj}
@@ -272,7 +272,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                 />
               </FormGroup>
 
-              <FormGroup label="Data de Emissão" fieldId="data_emissao">
+              <FormGroup label="Data de Emissão" isRequired fieldId="data_emissao">
                 <DatePicker
                   id="data_emissao"
                   value={form.data_emissao}
@@ -283,7 +283,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
 
               </FormGroup>
 
-              <FormGroup label="Valor Pago" fieldId="valor_total">
+              <FormGroup label="Valor Pago" isRequired fieldId="valor_total">
                 <TextInput
                   id="valor_total"
                   type="number"
