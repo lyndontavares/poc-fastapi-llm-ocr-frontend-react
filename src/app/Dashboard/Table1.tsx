@@ -470,7 +470,7 @@ export const TableColumnManagement: React.FunctionComponent = () => {
       {renderPagination('bottom', false)}
       {renderModal()}
 
-      {loading && <Block message="Carregando conteúdo..." />}
+      {loading && <Block message="Carregando notas fiscais..." />}
 
     </Fragment>
   );
