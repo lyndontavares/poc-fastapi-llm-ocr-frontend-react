@@ -89,7 +89,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       const payload = new FormData();
       payload.append('file', file);
 
-      const resposta = await fetch('http://127.0.0.1:8000/invoices/extract/check', {
+      const resposta = await fetch(process.env.APP_URL + '/invoices/extract/check', {
         method: 'POST',
         body: payload,
         /*         headers: {
@@ -159,11 +159,11 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       addAlert('[CNPJ] é obrigatório.', 'warning', getUniqueId());
       return false;
     }
-     if (! validaCNPJ(form.cnpj)) {
+    if (!validaCNPJ(form.cnpj)) {
       addAlert('[CNPJ] inválido.', 'warning', getUniqueId());
       return false;
     }
-       
+
     if (!form.data_emissao) {
       addAlert('[Data emissão] é obrigatório.', 'warning', getUniqueId());
       return false;
@@ -204,7 +204,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
     const json = JSON.stringify(Object.fromEntries(payload.entries()));
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/invoices/add', {
+      const response = await fetch(process.env.APP_URL + '/invoices/add', {
         method: 'POST',
         body: json,
         headers: {
@@ -354,7 +354,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                       border: '1px solid #ccc',
                       transition: 'transform 0.2s',
                       transform: `rotate(${rotation}deg)`,
-                       
+
                     }}
                   />
                   <div style={{ fontSize: '0.8rem', color: '#666' }}>
