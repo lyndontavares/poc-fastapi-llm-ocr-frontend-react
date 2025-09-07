@@ -16,18 +16,28 @@ const NotFound: React.FunctionComponent = () => {
       navigate('/');
     }
     return (
-      <Button onClick={handleClick}>Take me home</Button>
+      <Button onClick={handleClick}>Ir para cadastro de notas fiscais</Button>
     );
   }
 
   return (
     <PageSection hasBodyWrapper={false}>
-      <EmptyState titleText="404 Page not found" variant="full" icon={ExclamationTriangleIcon} >
+      <EmptyState titleText="Extração Inteligente de Dados de Notas Fiscais" variant="full" icon={ExclamationTriangleIcon} >
         <EmptyStateBody>
-          We didn&apos;t find a page that matches the address you navigated to.
+          IAA2 - Trabalho de término de curso / SETEMBRO 2025 <br />
+          Participantes do Grupo: <br />
+          Bruno Kenzo  <br />
+          Dario Volnei <br />
+          Douglas Kondo <br />
+          Elizabeth Marinho <br />
+          Felipe Santos <br />
+          Henrique Sardelli <br />
+          Henry Monteiro <br />
+          Jorge Pereira <br />
+          Lyndon Tavares
         </EmptyStateBody><EmptyStateFooter>
-        <GoHomeBtn />
-      </EmptyStateFooter></EmptyState>
+          <GoHomeBtn />
+        </EmptyStateFooter></EmptyState>
     </PageSection>
   )
 };

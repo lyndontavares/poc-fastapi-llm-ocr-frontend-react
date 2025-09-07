@@ -4,6 +4,11 @@ Frontend utilizado na POC Fastapi com Gemini. Criado para o segundo trabalho do 
 
 https://github.com/lyndontavares/poc-fastapi-llm-ocr
 
+## Run
+
+```
+npm run dev
+```
 
 <div align="center">
 

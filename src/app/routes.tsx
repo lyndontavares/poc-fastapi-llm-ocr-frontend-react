@@ -51,6 +51,14 @@ const routes: AppRouteConfig[] = [
       },
     ],
   },
+
+  {
+    element: <NotFound />,
+    exact: true,
+    label: 'Sobre',
+    path: '/sobre',
+    title: 'Extração Inteligente | Sobre',
+  },
 ];
 
 const flattenedRoutes: IAppRoute[] = routes.reduce(

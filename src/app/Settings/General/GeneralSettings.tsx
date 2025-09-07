@@ -16,7 +16,7 @@ const GeneralSettings: React.FunctionComponent = () => {
   function fetchData() {
     async function buscarJson() {
       try {
-        const resposta = await fetch('http://127.0.0.1:8000/configuration'); // 'http://localhost:3000/tarefas' https://jsonplaceholder.typicode.com/posts http://localhost:3000/tarefas
+        const resposta = await fetch(process.env.APP_URL + '/configuration'); // 'http://localhost:3000/tarefas' https://jsonplaceholder.typicode.com/posts http://localhost:3000/tarefas
         if (!resposta.ok) {
           throw new Error('Erro ao carregar JSON');
         }
@@ -37,8 +37,8 @@ const GeneralSettings: React.FunctionComponent = () => {
     async function salvarJson() {
       try {
         setLoading(true);
-        const resposta = await fetch('http://127.0.0.1:8000/configuration', {
-          method: 'POST',
+        const resposta = await fetch(process.env.APP_URL + '/configuration', {
+          method: 'PUT',
           body: form.prompt ? JSON.stringify({ prompt: form.prompt }) : '{}',
           headers: {
             'Content-Type': 'application/json'

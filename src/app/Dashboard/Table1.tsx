@@ -35,6 +35,7 @@ import Block from '../utils/Block';
 import ImageUploadModal from './ImageUploadModal';
 import buttonStyles from '@patternfly/react-styles/css/components/Button/button';
 import { ConfirmDialog } from '@app/utils/ConfirmDialog';
+import { format } from 'date-fns';
 
 export const TableColumnManagement: React.FunctionComponent = () => {
   const [formUploadOpen, setFormUploadOpen] = useState(false);
@@ -104,7 +105,20 @@ export const TableColumnManagement: React.FunctionComponent = () => {
       onPerPageSelect={handlePerPageSelect}
       variant={variant}
       titles={{
-        paginationAriaLabel: `${variant} pagination`
+        paginationAriaLabel: `${variant} paginação`,
+        itemsPerPage: 'Itens por página',
+        toPreviousPageAriaLabel: 'Página anterior',
+        toNextPageAriaLabel: 'Próxima página',
+        ofWord: 'de',
+        currPageAriaLabel: 'Página atual',
+        toFirstPageAriaLabel: 'Primeira página',
+        toLastPageAriaLabel: 'Última página',
+        perPageSuffix: ' por página'
+        /*         items: 'Itens',
+                page: 'Página',
+                pages: 'Páginas',
+                perPageSuffix: ' por página', */
+
       }}
     />
   );
@@ -118,11 +132,17 @@ export const TableColumnManagement: React.FunctionComponent = () => {
   function fetchData() {
     async function buscarJson() {
       try {
-        const resposta = await fetch('http://127.0.0.1:8000/invoices'); // 'http://localhost:3000/tarefas' https://jsonplaceholder.typicode.com/posts http://localhost:3000/tarefas
+        const resposta = await fetch(process.env.APP_URL + '/invoices'); // 'http://localhost:3000/tarefas' https://jsonplaceholder.typicode.com/posts http://localhost:3000/tarefas
         if (!resposta.ok) {
           throw new Error('Erro ao carregar JSON');
         }
         const json = await resposta.json();
+
+        json.map((item) => {
+          item.data_emissao = formataData(new Date(item.data_emissao));
+          return item;
+        });
+
         setDefaultRows(json);
         setManagedRows(json);
         setPaginatedRows(json.slice((page - 1) * perPage, page * perPage - 1));
@@ -143,6 +163,9 @@ export const TableColumnManagement: React.FunctionComponent = () => {
       currency: 'BRL',
     }).format(valor);
   };
+
+
+
 
   useEffect(() => {
     setPaginatedRows(managedRows.slice((page - 1) * perPage, page * perPage - 1));
@@ -273,7 +296,8 @@ export const TableColumnManagement: React.FunctionComponent = () => {
                         if (event.currentTarget.name === `check-${colData.name}`) {
                           newColumnData = [...newColumnData, { name: colData.name, checked: !colData.checked }];
                           filterData(!colData.checked, colData.name);
-                        } else {
+                        }
+                        else {
                           newColumnData = [...newColumnData, colData];
                         }
                       });
@@ -375,7 +399,7 @@ export const TableColumnManagement: React.FunctionComponent = () => {
     if (!row || !row.id) return;
     try {
       setLoading(true);
-      const response = await fetch(`http://127.0.0.1:8000/invoices/${row.id}`, {
+      const response = await fetch(process.env.APP_URL + `/invoices/${row.id}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
@@ -416,7 +440,7 @@ export const TableColumnManagement: React.FunctionComponent = () => {
                     </Td>
                   ) : key === 'valor_total' ? (
                     <Td width={10} dataLabel="Valor Total" key={`${idx}-${value}`}>
-                       {formatarParaReais(value as number)}
+                      {formatarParaReais(value as number)}
                     </Td>
                   ) : (
                     <Td
@@ -451,3 +475,9 @@ export const TableColumnManagement: React.FunctionComponent = () => {
     </Fragment>
   );
 };
+
+
+const formataData = (date) => {
+  const formattedDate = format(date, 'dd/MM/yyyy');
+  return formattedDate;
+}

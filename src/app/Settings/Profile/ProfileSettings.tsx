@@ -3,8 +3,8 @@ import { Card, CardBody, CardHeader, CardTitle, Checkbox, Gallery, PageSection, 
 import { useState } from 'react';
 
 const ProfileSettings: React.FunctionComponent = () => {
-   
-   const [isChecked1, setIsChecked1] = useState(true);
+
+  const [isChecked1, setIsChecked1] = useState(true);
   const [isChecked2, setIsChecked2] = useState(false);
   const [isChecked3, setIsChecked3] = useState(false);
   const [isSecondary, setIsSecondary] = useState<boolean>(false);
@@ -16,23 +16,23 @@ const ProfileSettings: React.FunctionComponent = () => {
   const onChange = (event: React.FormEvent<HTMLInputElement>, checked: boolean) => {
     const name = event.currentTarget.name;
 
-    switch (name) {
-      case id1:
-        setIsChecked1(checked);
-        setIsChecked2(!checked);
-        setIsChecked3(!checked);
-        break;
-      case id2:
-        setIsChecked1(!checked);
-        setIsChecked2(checked);
-        setIsChecked3(!checked);
-        break;
-      case id3:
-        setIsChecked1(!checked);
-        setIsChecked2(!checked);
-        setIsChecked3(checked);
-        break;
-    }
+    /*     switch (name) {
+          case id1:
+            setIsChecked1(checked);
+            setIsChecked2(!checked);
+            setIsChecked3(!checked);
+            break;
+          case id2:
+            setIsChecked1(!checked);
+            setIsChecked2(checked);
+            setIsChecked3(!checked);
+            break;
+          case id3:
+            setIsChecked1(!checked);
+            setIsChecked2(!checked);
+            setIsChecked3(checked);
+            break;
+        } */
   };
 
   return (
@@ -41,7 +41,7 @@ const ProfileSettings: React.FunctionComponent = () => {
         Selecionar LLM
       </Title>
 
-  
+
       <div style={{ marginTop: '15px' }}>
         <Gallery hasGutter>
           <Card
@@ -66,7 +66,7 @@ const ProfileSettings: React.FunctionComponent = () => {
           <Card
             id="selectable-card-example-2"
             isSelectable
-            isSelected={isChecked2}
+            isDisabled
             variant={isSecondary ? 'secondary' : 'default'}
           >
             <CardHeader
