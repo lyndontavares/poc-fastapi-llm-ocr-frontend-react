@@ -32,9 +32,7 @@ const routes: AppRouteConfig[] = [
     title: 'Extração Inteligente | Cadastro de Notas Fiscais',
   },
 
-  {
-    label: 'Configurações',
-    routes: [
+ 
       {
         element: <GeneralSettings />,
         exact: true,
@@ -49,8 +47,7 @@ const routes: AppRouteConfig[] = [
         path: '/settings/profile',
         title: 'Extração Inteligente | Selecionar LLM',
       },
-    ],
-  },
+ 
 
   {
     element: <NotFound />,

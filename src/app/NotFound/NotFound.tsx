@@ -33,7 +33,6 @@ const NotFound: React.FunctionComponent = () => {
           Felipe Santos <br />
           Henrique Sardelli <br />
           Henry Monteiro <br />
-          Jorge Pereira <br />
           Lyndon Tavares
         </EmptyStateBody><EmptyStateFooter>
           <GoHomeBtn />
