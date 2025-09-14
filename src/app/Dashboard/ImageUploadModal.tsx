@@ -19,10 +19,13 @@ import {
   AlertVariant,
   Flex,
   FlexItem,
-  ValidatedOptions
+  ValidatedOptions,
+  FormSelect,
+  FormSelectOption
 } from '@patternfly/react-core';
 import Block from '@app/utils/Block';
 import { validaCNPJ } from '@app/utils/cnpjUtil';
+import { formatDateBRtoISO, isValidDateBR } from '@app/utils/dateUtil';
 
 export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
   const [imageFile, setImageFile] = useState(null);
@@ -32,6 +35,18 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
   const [mensagem, setMensagem] = useState('');
 
   const [rotation, setRotation] = useState(0);
+  const [isValidDate, setIsValidDate] = useState(true);
+
+  const listaDespesas = [
+    { value: '', label: '', disabled: false },
+    { value: 'Alimentação', label: 'Alimentação', disabled: false },
+    { value: 'Aluguel', label: 'Aluguel', disabled: false },
+    { value: 'Combustível', label: 'Combustível', disabled: false },
+    { value: 'Energia', label: 'Energia', disabled: false },
+    { value: 'Escritório', label: 'Escritório', disabled: false },
+    { value: 'Internet', label: 'Internet', disabled: false },
+    { value: 'Telefone', label: 'Telefone', disabled: false },
+  ];
 
   const rotate = () => {
     setRotation((prev) => (prev + 90) % 360); // gira 90° por clique
@@ -39,6 +54,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
 
   const dateFormat = (date: Date) =>
     date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+
 
   const dateParse = (date: string) => {
     const split = date.split('-');
@@ -54,6 +70,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
   const [form, setForm] = useState({
     id: '',
     cnpj: '',
+    tipo_despesa: '',
     data_emissao: '',
     valor_total: '',
     imagem_hash: '',
@@ -70,7 +87,15 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
 
   function handleChange(name, value) {
     setForm({ ...form, [name]: value });
+    console.log(">>>handleChange ", name, value);
+    console.log(">>>form ", form);
   }
+
+  const handleDateChange = (value: string, date) => {
+    setForm({ ...form, ["data_emissao"]: date });
+    console.log(">>>handleDateChange ", value, date);
+    console.log(">>>form ", form);
+  };
 
   async function handleFileChange(_, file) {
     setIsLoading(true);
@@ -97,15 +122,21 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                 } */
       })
       const json = await resposta.json();
+
+
       setForm({
         ...form,
         id: json.id || '',
         cnpj: json.cnpj || '',
+        tipo_despesa: json.tipo_despesa || '',
         data_emissao: converterData(json.data_emissao) || '',
         valor_total: json.valor_total || '',
         imagem_hash: json.imagem_hash || '',
         status: json.status || 'CHECKING'
       });
+
+      console.log('>>>json', json);
+      console.log('>>>form', form);
 
     } catch (error) {
       addAlert('Erro ao processar extração de dados.', 'danger', getUniqueId());
@@ -120,13 +151,26 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
     if (!dia || !mes || !ano || dia.length !== 2 || mes.length !== 2 || ano.length !== 4) {
       throw new Error("Formato de data inválido. Esperado: dd/mm/yyyy");
     }
-    return `${ano}-${mes}-${dia}`;
+    //return `${ano}-${mes}-${dia}`;
+    return `${dia}/${mes}/${ano}`;
   }
 
   function handleClearImage() {
     setImageFile(null);
     setImagePreview(null);
     setZoomed(false);
+    clearform();
+  }
+
+  function clearform() {
+    setForm({
+      id: '',
+      cnpj: '',
+      data_emissao: '',
+      valor_total: '',
+      imagem_hash: '',
+      status: 'CHECKING'
+    });
   }
 
   function handleSubmit() {
@@ -155,6 +199,10 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
   const getUniqueId = () => new Date().getTime();
 
   function formCheck() {
+    if (!form.tipo_despesa) {
+      addAlert('[TIPO DE DESPESA] é obrigatório.', 'warning', getUniqueId());
+      return false;
+    }
     if (!form.cnpj) {
       addAlert('[CNPJ] é obrigatório.', 'warning', getUniqueId());
       return false;
@@ -168,6 +216,12 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       addAlert('[Data emissão] é obrigatório.', 'warning', getUniqueId());
       return false;
     }
+
+    if (!isValidDateBR(form.data_emissao)) {
+      addAlert('[Data emissão] inválida.', 'warning', getUniqueId());
+      return false;
+    }
+
     if (!form.valor_total) {
       addAlert('[Valor] é obrigatório.', 'warning', getUniqueId());
       return false;
@@ -195,7 +249,8 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
 
     const payload = new FormData();
     payload.append('id', '0');
-    payload.append('data_emissao', form.data_emissao);
+    payload.append('tipo_despesa', form.tipo_despesa);
+    payload.append('data_emissao', formatDateBRtoISO(form.data_emissao));
     payload.append('valor_total', form.valor_total);
     payload.append('cnpj', form.cnpj);
     payload.append('imagem_hash', form.imagem_hash);
@@ -215,6 +270,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       console.log(response);
 
       if (response.ok) {
+        clearform();
         //addAlert('Salvo com sucesso.', 'success', getUniqueId());
         onClose();
       } else {
@@ -253,7 +309,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
       <ModalBody id="modal-box-body-basic">
 
 
-        <Form>
+        <Form >
           <div style={{ display: 'flex', gap: '2rem' }}>
             {/* Coluna 1: Campos do formulário */}
             <div style={{ flex: 1 }}>
@@ -264,6 +320,21 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                   value={form.id}
                   onChange={(e, val) => handleChange('id', val)}
                 />
+              </FormGroup>
+
+              <FormGroup label="Tipo de Despesa" isRequired fieldId="tipo_despesa">
+                <FormSelect
+                  value={form.tipo_despesa}
+                  onChange={(e, val) => handleChange('tipo_despesa', val)}
+                  aria-label="FormSelect Input"
+                  ouiaId="BasicFormSelect">
+                  {listaDespesas.map((option, index) => (
+                    <FormSelectOption isDisabled={option.disabled}
+                      key={index}
+                      value={option.value}
+                      label={option.label} />
+                  ))}
+                </FormSelect>
               </FormGroup>
 
               <FormGroup label="CNPJ" isRequired fieldId="cnpj">
@@ -278,13 +349,23 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                 />
               </FormGroup>
 
-              <FormGroup label="Data de Emissão" isRequired fieldId="data_emissao">
+              <FormGroup label="Data de Emissão" isRequired fieldId="data_emissao" >
                 <DatePicker
+                  onBlur={(_event, str, date) => console.log('onBlur', str, date)}
                   id="data_emissao"
                   value={form.data_emissao}
-                  onChange={(e, val) => handleChange('data_emissao', val)}
+                  onChange={(e, val) => handleDateChange('data_emissao', val)}
                   requiredDateOptions={{ isRequired: true, emptyDateText: 'Data emissão é obrigatória' }}
-                  dateFormat={dateFormat} dateParse={dateParse}
+                  invalidFormatText='Formato inválido. Use DD/MM/AAAA'
+                  placeholder='DD/MM/AAAA'
+                  dateFormat={(date: Date) =>
+                    new Intl.DateTimeFormat("pt-BR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    }).format(date)
+                  }
+                  dateParse={dateParse}
                 />
 
               </FormGroup>
@@ -332,7 +413,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                   hideDefaultPreview
                   browseButtonText='Selecione...'
                   filenamePlaceholder='Arraste e solte ou clique para selecionar uma imagem'
-                  clearButtonText='Limpar Imagem'
+                  clearButtonText='Limpar Formulário'
 
                 />
               </FormGroup>
@@ -360,8 +441,8 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
                   <div style={{ fontSize: '0.8rem', color: '#666' }}>
                     (Clique para {zoomed ? 'reduzir' : 'ampliar'})
                   </div>
-                  <Button onClick={() => setRotation(rotation - 90)} variant="secondary" style={{ marginTop: 10 }}> ←</Button>
-                  <Button onClick={() => setRotation(rotation + 90)} variant="secondary" style={{ marginTop: 10 }}> →</Button>
+                  <Button onClick={() => setRotation(rotation - 90)} variant="secondary" style={{ marginTop: 10 }}> Girar para a esquerda</Button>
+                  <Button onClick={() => setRotation(rotation + 90)} variant="secondary" style={{ marginTop: 10 }}> Girar para a direita</Button>
                 </div>
               )}
             </div>

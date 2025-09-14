@@ -5,7 +5,7 @@ import Block from '@app/utils/Block';
 
 const GeneralSettings: React.FunctionComponent = () => {
 
-  const exemplo = "Analise esta imagem de nota fiscal. Extraia as seguintes informações e formate-as como um objeto JSON. Se um dado não for encontrado, use `null`. Não adicione nenhum texto antes ou depois do JSON. Certifique-se de que o JSON é válido: {\"cnpj\":[CNPJ, com 14 números ou mais], \"data\":[Data da emissão no formato DD/MM/AAAA], \"valor\":[Valor total pago da nota fiscal, em formato numérico com ponto como separador decimal, ex: 123.45]}";
+  const exemplo = "Analise esta imagem de nota fiscal. Extraia as seguintes informações e formate-as como um objeto JSON. Se um dado não for encontrado, use `null`. Não adicione nenhum texto antes ou depois do JSON. Certifique-se de que o JSON é válido: {\"cnpj\":[CNPJ, com 14 números ou mais], \"tipo_despesa\":[TIPO_DESPESA, classifique como: Alimentaçao, Aluguel, Combustível (se encontrar: Gasolina, Etanol, Diesel, GNV), Energia (Se encontrar companhias elétricas), Escritório, Internet, Telefone (telefonia, celular, oi, claro, tim, etc)  ] ,\"data\":[Data da emissão no formato DD/MM/AAAA], \"valor\":[Valor total pago da nota fiscal, em formato numérico com ponto como separador decimal, ex: 123.45]}";
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ prompt: '' });
 
@@ -72,11 +72,11 @@ const GeneralSettings: React.FunctionComponent = () => {
         </p>
         <Form>
 
-          <FormGroup label="Prompt" fieldId="prompt">
+          <FormGroup label="Prompt Utililzado" fieldId="prompt">
             <TextArea
               id="prompt"
               value={form.prompt}
-              rows={10}
+              rows={8}
               onChange={(e, v) => setForm({ ...form, ['prompt']: v })}
             />
           </FormGroup>

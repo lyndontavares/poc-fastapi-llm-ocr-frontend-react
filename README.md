@@ -2,12 +2,12 @@
 
 Frontend utilizado na POC Fastapi com Gemini. Criado para o segundo trabalho do curso da I1A2 em Junho de 2025.
 
-https://github.com/lyndontavares/poc-fastapi-llm-ocr
+<https://github.com/lyndontavares/poc-fastapi-llm-ocr>
 
 ## Run
 
-```
-npm run dev
+```bash
+npm run start:dev
 ```
 
 <div align="center">
@@ -16,7 +16,6 @@ npm run dev
 
 ![](assets/tela1.png)
 
-
 ## Adicionar Nota
 
 ![](assets/tela2.png)
@@ -24,6 +23,5 @@ npm run dev
 ## Extração de dados
 
 ![](assets/tela3.png)
-
 
 </div>

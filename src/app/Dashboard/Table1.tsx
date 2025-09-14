@@ -40,7 +40,7 @@ import { format } from 'date-fns';
 export const TableColumnManagement: React.FunctionComponent = () => {
   const [formUploadOpen, setFormUploadOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const defaultColumns = ['Id', ' CNPJ', 'Data', 'Valor', 'Hash', 'Status', 'Ação']; //columns;
+  const defaultColumns = ['Id', 'Tipo', 'CNPJ', 'Data', 'Valor', 'Hash', 'Status', 'Ação']; //columns;
   const [defaultRows, setDefaultRows] = useState<any[]>([]); // rows;
 
   const [filters, setFilters] = useState<string[]>([]);
@@ -63,6 +63,8 @@ export const TableColumnManagement: React.FunctionComponent = () => {
     switch (name) {
       case 'Id':
         return 'id';
+      case 'Tipo':
+        return 'tipo_despesa';
       case 'CNPJ':
         return 'cnpj';
       case 'Data':
@@ -137,6 +139,8 @@ export const TableColumnManagement: React.FunctionComponent = () => {
           throw new Error('Erro ao carregar JSON');
         }
         const json = await resposta.json();
+
+        console.log('>>>json', json);
 
         json.map((item) => {
           item.data_emissao = formataData(new Date(item.data_emissao));
@@ -448,7 +452,7 @@ export const TableColumnManagement: React.FunctionComponent = () => {
                       dataLabel={key === 'lastModified' ? 'Last modified' : capitalize(key)}
                       key={`${idx}-${value}`}
                     >
-                      {value as string}
+                      <span className="pf-v6-u-text-nowrap">{value as string}</span>
                     </Td>
                   )
                 )}
