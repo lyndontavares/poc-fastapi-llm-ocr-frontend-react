@@ -292,8 +292,7 @@ export default function ImageUploadModal({ isOpen, onClose, onSubmit }) {
     <Modal
       aria-label="Formulário de adicionar nota fiscal"
       isOpen={isOpen}
-      onClose={onClose}
-
+      onClose={(event) => { clearform(); onClose(event) }}
     >
 
       <ModalHeader
